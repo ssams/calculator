@@ -12,7 +12,6 @@ Expression::Expression(std::string op) : Expression(op, nullptr, nullptr) {
 
 Expression::Expression(std::string op, const Expression*  left, const Expression* const right) :
 	mOperator(op), mLeftNode(left), mRightNode(right) {
-
 }
 
 const Expression* const Expression::getLeftNode() const {
