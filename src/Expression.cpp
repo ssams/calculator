@@ -26,25 +26,32 @@ bool Expression::isLeaf() const {
 	return (mLeftNode == nullptr) && (mRightNode == nullptr);
 }
 
-double Expression::evaluate() const {
+double Expression::evaluate(std::map<std::string, Expression *> params) const {
 	if(isLeaf()) {
-		double value;
-		std::istringstream in(mOperator);
-		in >> value;
-		return value;
+		std::map<std::string, Expression *>::iterator param = params.find(mOperator);
+		if(param != params.end()) {
+			//std::cout << "param: " << param->first << std::endl;
+			return param->second->evaluate();
+		} else {
+			double value;
+			std::istringstream in(mOperator);
+			in >> value;
+			//std::cout << "op: " << mOperator << ", value: " << value << std::endl;
+			return value;
+		}
 	} else {
 		if(mOperator == "*") {
-			return getLeftNode()->evaluate() * getRightNode()->evaluate();
+			return getLeftNode()->evaluate(params) * getRightNode()->evaluate(params);
 		} else if(mOperator == "/") {
-			return getLeftNode()->evaluate() / getRightNode()->evaluate();
+			return getLeftNode()->evaluate(params) / getRightNode()->evaluate(params);
 		} else if(mOperator == "+") {
-			return getLeftNode()->evaluate() + getRightNode()->evaluate();
+			return getLeftNode()->evaluate(params) + getRightNode()->evaluate(params);
 		} else if(mOperator == "-") {
-			return getLeftNode()->evaluate() - getRightNode()->evaluate();
+			return getLeftNode()->evaluate(params) - getRightNode()->evaluate(params);
 		}
+		throw std::runtime_error("could not evaluate operator");
 	}
 
-	throw std::runtime_error("could not evaluate operator");
 }
 
 } /* namespace calculator */

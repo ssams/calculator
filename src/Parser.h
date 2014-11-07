@@ -20,10 +20,11 @@ public:
 	Parser();
 	~Parser();
 
-	std::forward_list<const Expression*> expressions;
+
 	Expression* parse(std::string input);
 
 private:
+	std::forward_list<const Expression*> expressions;
 	Expression* parse(std::string input, std::forward_list<const Expression*> expressions);
 	std::string preProcessInputString(std::string input);
 };

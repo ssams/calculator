@@ -8,13 +8,13 @@
 #include "Parser.h"
 #include "Expression.h"
 #include <iostream>
+#include <algorithm>
 
 namespace calculator{
 
 Parser::Parser(){}
 
 Parser::~Parser(){
-	std::cout << "desctructor called";
 	for(const Expression* expr : expressions) {
 				delete expr;
 	}
@@ -52,6 +52,9 @@ std::string Parser::preProcessInputString(std::string input){
 		input.replace(pos, 1, replacement);
 		pos += replacement.size();
 	}
+
+	input.erase(std::remove(input.begin(), input.end(), ' '), input.end());
+
 	return input;
 }
 } // namespace calc

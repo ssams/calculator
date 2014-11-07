@@ -4,11 +4,10 @@
 #include <forward_list>
 
 #include "Expression.h"
+#include "Function.h"
 #include "Parser.h"
 
 using namespace calculator;
-
-Expression* parse(std::string input, std::forward_list<const Expression*> expressions);
 
 int main(int argc, char *argv[]) {
 
@@ -22,12 +21,16 @@ int main(int argc, char *argv[]) {
 	std::cout << exprMult.evaluate() << std::endl;*/
 
 	std::string input(argv[1]);
-	std::cout << input << std::endl;
+	//std::cout << input << std::endl;
 
 	Parser* parser = new Parser();
 	Expression* expr = parser->parse(input);
 
-	std::cout << expr->evaluate() << std::endl;
+	//std::cout << expr->evaluate() << std::endl;
+
+	Function fun(parser->parse("x*x + x"), {"x"});
+	Expression *paramX = parser->parse("7");
+	std::cout << fun.evaluate({paramX}) << std::endl;
 
 	delete parser;
 	return EXIT_SUCCESS;

@@ -2,6 +2,7 @@
 #define EXPRESSION_H_
 
 #include <string>
+#include <map>
 
 namespace calculator {
 
@@ -10,7 +11,7 @@ public:
 	Expression(std::string op);
 	Expression(std::string op, const Expression* const left, const Expression* const right);
 
-	double evaluate() const;
+	double evaluate(std::map<std::string, Expression *> params = std::map<std::string, Expression *>()) const;
 
 protected:
 	const Expression* const getLeftNode() const;
