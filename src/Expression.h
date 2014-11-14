@@ -3,25 +3,28 @@
 
 #include <string>
 #include <map>
+#include <memory>
 
 namespace calculator {
 
 class Expression {
 public:
+	typedef std::shared_ptr<Expression> Ptr;
+	typedef std::shared_ptr<const Expression> PtrConst;
+
 	Expression(std::string op);
-	Expression(std::string op, const Expression* const left, const Expression* const right);
+	Expression(std::string op, const PtrConst left, const PtrConst right);
 
-	double evaluate(std::map<std::string, Expression *> params = std::map<std::string, Expression *>()) const;
-
+	double evaluate(std::map<std::string, Ptr> params = std::map<std::string, Ptr>()) const;
 protected:
-	const Expression* const getLeftNode() const;
-	const Expression* const getRightNode() const;
+	const PtrConst getLeftNode() const;
+	const PtrConst getRightNode() const;
 	bool isLeaf() const;
 
 private:
 	const std::string mOperator;
-	const Expression* const mLeftNode;
-	const Expression* const mRightNode;
+	const PtrConst mLeftNode;
+	const PtrConst mRightNode;
 };
 
 } /* namespace calculator */

@@ -10,13 +10,13 @@ namespace calculator {
 
 class Function {
 public:
-	Function(Expression *expression, std::set<std::string> params);
+	Function(Expression::PtrConst expression, std::set<std::string> params);
 	virtual ~Function();
 
-	double evaluate(std::vector<Expression *> paramValues);
+	double evaluate(std::vector<Expression::Ptr> paramValues);
 
 private:
-	Expression *expression;
+	Expression::PtrConst expression;
 	std::set<std::string> params;
 };
 

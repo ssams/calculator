@@ -21,11 +21,10 @@ public:
 	~Parser();
 
 
-	Expression* parse(std::string input);
+	Expression::Ptr parse(std::string input);
 
 private:
-	std::forward_list<const Expression*> expressions;
-	Expression* parse(std::string input, std::forward_list<const Expression*> expressions);
+	Expression::Ptr parse_core(std::string input);
 	std::string preProcessInputString(std::string input);
 };
 

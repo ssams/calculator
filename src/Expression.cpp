@@ -10,15 +10,15 @@ Expression::Expression(std::string op) : Expression(op, nullptr, nullptr) {
 
 }
 
-Expression::Expression(std::string op, const Expression*  left, const Expression* const right) :
+Expression::Expression(std::string op, const PtrConst  left, const PtrConst right) :
 	mOperator(op), mLeftNode(left), mRightNode(right) {
 }
 
-const Expression* const Expression::getLeftNode() const {
+const Expression::PtrConst Expression::getLeftNode() const {
 	return mLeftNode;
 }
 
-const Expression* const Expression::getRightNode() const {
+const Expression::PtrConst Expression::getRightNode() const {
 	return mRightNode;
 }
 
@@ -26,9 +26,9 @@ bool Expression::isLeaf() const {
 	return (mLeftNode == nullptr) && (mRightNode == nullptr);
 }
 
-double Expression::evaluate(std::map<std::string, Expression *> params) const {
+double Expression::evaluate(std::map<std::string, Ptr> params) const {
 	if(isLeaf()) {
-		std::map<std::string, Expression *>::iterator param = params.find(mOperator);
+		std::map<std::string, Expression::Ptr>::iterator param = params.find(mOperator);
 		if(param != params.end()) {
 			//std::cout << "param: " << param->first << std::endl;
 			return param->second->evaluate();

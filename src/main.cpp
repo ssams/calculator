@@ -24,12 +24,12 @@ int main(int argc, char *argv[]) {
 	//std::cout << input << std::endl;
 
 	Parser* parser = new Parser();
-	Expression* expr = parser->parse(input);
+	Expression::Ptr expr = parser->parse(input);
 
 	//std::cout << expr->evaluate() << std::endl;
 
 	Function fun(parser->parse("x*x + x"), {"x"});
-	Expression *paramX = parser->parse("7");
+	Expression::Ptr paramX = parser->parse("7");
 	std::cout << fun.evaluate({paramX}) << std::endl;
 
 	delete parser;
