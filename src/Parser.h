@@ -8,9 +8,10 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
-#include <array>
-#include <forward_list>
 #include "Expression.h"
+#include "Function.h"
+#include <array>
+#include <map>
 
 namespace calculator {
 
@@ -26,6 +27,8 @@ public:
 private:
 	Expression::Ptr parse_core(std::string input);
 	std::string preProcessInputString(std::string input);
+
+	std::map<std::string, Function> functions;
 };
 
 } /* namespace calculator */

@@ -24,7 +24,11 @@ int main(int argc, char *argv[]) {
 	//std::cout << input << std::endl;
 
 	Parser* parser = new Parser();
+	parser->parse("mul(x,y) = x*y");
 	Expression::Ptr expr = parser->parse(input);
+	if(expr != nullptr) {
+		std::cout << expr->evaluate() << std::endl;
+	}
 
 	//std::cout << expr->evaluate() << std::endl;
 
