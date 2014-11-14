@@ -28,7 +28,7 @@ Expression::Ptr Parser::parse(std::string input){
 	if(regex_match(input, matches, functionDefRegex)) {
 		std::string functionName = matches[1];
 		std::set<std::string> params(matches.begin() + 2, matches.end() - 1);
-		Expression::Ptr expr = parse_core(preProcessInputString(*(matches.end() - 1)));
+		Expression::Ptr expr = parse(*(matches.end() - 1));
 		Function fun(expr, params);
 		functions.emplace(functionName, fun);
 
