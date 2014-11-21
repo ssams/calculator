@@ -6,6 +6,7 @@
 #include "Expression.h"
 #include "Function.h"
 #include "Parser.h"
+#include "Calculator.h"
 
 using namespace calculator;
 
@@ -20,10 +21,10 @@ int main(int argc, char *argv[]) {
 
 	std::cout << exprMult.evaluate() << std::endl;*/
 
-	std::string input(argv[1]);
+	//std::string input(argv[1]);
 	//std::cout << input << std::endl;
 
-	Parser* parser = new Parser();
+	/*Parser* parser = new Parser();
 	parser->parse("mul(x,y) = x*y");
 	Expression::Ptr expr = parser->parse(input);
 	if(expr != nullptr) {
@@ -37,6 +38,11 @@ int main(int argc, char *argv[]) {
 	std::cout << fun.evaluate({paramX}) << std::endl;
 
 	delete parser;
+	return EXIT_SUCCESS;*/
+
+	Calculator calc;
+	calc.start();
+
 	return EXIT_SUCCESS;
 }
 
