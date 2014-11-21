@@ -13,9 +13,11 @@
 
 namespace calculator {
 
-Calculator::Calculator():parser()
-{
-	parser = new Parser();
+Calculator::Calculator() :
+		parser(),
+		functionDefRegex("([[:alpha:]]+)\\(([[:alpha:]]+)(?:,([[:alpha:]]+))*\\)[[:space:]]*=(.*)"),
+		functionCallRegex("([[:alpha:]]+)\\(([^,]+)(?:,([^,]+))*\\)") {
+
 }
 
 Calculator::~Calculator() {}
@@ -30,28 +32,43 @@ void Calculator::start(){
 		std::cout << ":";
 		std::getline(std::cin, input);
 
-		InputType t = parser->getInputType(input);
-		Expression::Ptr e;
-
-		switch(t){
-
-		case InputType::Expression:
-			std::cout << "expression" << std::endl;
-
+		std::smatch matches;
+		if(std::regex_match(input, matches, functionDefRegex)) {
+			handleFunctionDefinition(matches);
+		} else if(regex_match(input, matches, functionCallRegex)) {
+			handleFunctionCall(matches);
+		} else {
+			Expression::Ptr e;
 			e = parser->parse(input);
-			std::cout << e->evaluate();
-			break;
-		case InputType::FuncCall:
-			std::cout << "Function Call";
-			break;
-		case InputType::FuncDef:
-			std::cout << "Function Definition";
-			auto func = parser->parseFunction(input);
-			break;
-
+			std::cout << e->evaluate() << std::endl;
 		}
-		std::cout << std::endl;
 
+	}
+}
+
+
+void Calculator::handleFunctionDefinition(const std::smatch &matches) {
+	std::string functionName = matches[1];
+	std::set<std::string> params(matches.begin() + 2, matches.end() - 1);
+	Expression::Ptr expr = parser->parse(*(matches.end() - 1));
+	Function fun(expr, params);
+
+	functions.emplace(functionName, fun);
+	std::cout << "stored function " << functionName << std::endl;
+}
+
+void Calculator::handleFunctionCall(const std::smatch &matches) {
+	std::cout << "function call" << std::endl;
+	std::string functionName = matches[1];
+	try {
+		Function fun = functions.at(functionName);
+		std::vector<Expression::Ptr> values;
+		for(auto i = matches.begin() + 2; i != matches.end(); i++) {
+			values.push_back(parser->parse(*i));
+		}
+		std::cout << fun.evaluate(values) << std::endl;
+	} catch(std::out_of_range &e) {
+		std::cout << "unknown function" << std::endl;
 	}
 }
 
