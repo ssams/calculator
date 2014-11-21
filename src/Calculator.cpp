@@ -6,9 +6,10 @@
  */
 
 #include "Calculator.h"
-#include <iostream>
 #include "Expression.h"
+#include <iostream>
 #include <cstdlib>
+#include <string>
 
 namespace calculator {
 
@@ -27,7 +28,7 @@ void Calculator::start(){
 
 	while(input != "q"){
 		std::cout << ":";
-		std::cin >> input;
+		std::getline(std::cin, input);
 
 		InputType t = parser->getInputType(input);
 		Expression::Ptr e;

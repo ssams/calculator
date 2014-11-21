@@ -16,12 +16,8 @@
 namespace calculator{
 
 Parser::Parser(){
-	try{
-	std::regex functionDefRegex("([[:alpha:]]+)\\(([[:alpha:]]+)(?:,([[:alpha:]]+))*\\)[[:space:]]*=(.*)", std::regex::ECMAScript);
-	}catch(std::regex_error e){
-		std::cout << e.code();
-	}
-	//std::regex functionCallRegex("([[:alpha:]]+)\\(([^,]+)(?:,([^,]+))*\\)", std::regex_constants);
+	std::regex functionDefRegex("([[:alpha:]]+)\\(([[:alpha:]]+)(?:,([[:alpha:]]+))*\\)[[:space:]]*=(.*)");
+	std::regex functionCallRegex("([[:alpha:]]+)\\(([^,]+)(?:,([^,]+))*\\)");
 }
 
 
