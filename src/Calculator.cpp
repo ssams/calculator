@@ -38,7 +38,7 @@ void Calculator::start(){
 		} else if(regex_match(input, matches, functionCallRegex)) {
 			handleFunctionCall(matches);
 		} else {
-			Expression::Ptr e;
+			Expression<double>::Ptr e;
 			e = parser->parse(input);
 			std::cout << e->evaluate() << std::endl;
 		}
@@ -50,8 +50,8 @@ void Calculator::start(){
 void Calculator::handleFunctionDefinition(const std::smatch &matches) {
 	std::string functionName = matches[1];
 	std::set<std::string> params(matches.begin() + 2, matches.end() - 1);
-	Expression::Ptr expr = parser->parse(*(matches.end() - 1));
-	Function fun(expr, params);
+	Expression<double>::Ptr expr = parser->parse(*(matches.end() - 1));
+	Function<double> fun(expr, params);
 
 	functions.emplace(functionName, fun);
 	std::cout << "stored function " << functionName << std::endl;
@@ -61,8 +61,8 @@ void Calculator::handleFunctionCall(const std::smatch &matches) {
 	std::cout << "function call" << std::endl;
 	std::string functionName = matches[1];
 	try {
-		Function fun = functions.at(functionName);
-		std::vector<Expression::Ptr> values;
+		Function<double> fun = functions.at(functionName);
+		std::vector<Expression<double>::Ptr> values;
 		for(auto i = matches.begin() + 2; i != matches.end(); i++) {
 			values.push_back(parser->parse(*i));
 		}

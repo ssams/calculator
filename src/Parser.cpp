@@ -22,25 +22,25 @@ Parser::Parser() {
 Parser::~Parser(){
 }
 
-Expression::Ptr Parser::parse(std::string input){
+Expression<double>::Ptr Parser::parse(std::string input){
 	input = preProcessInputString(input);
 	std::cout << input << std::endl;
 	return parse_core(input);
 }
 
-Expression::Ptr Parser::parse_core(std::string input){
+Expression<double>::Ptr Parser::parse_core(std::string input){
 	std::array<std::string, 3> operators {"+", "*", "/"};
 	for(auto op : operators) {
 		std::string::size_type pos = input.find(op);
 		if(pos != std::string::npos) {
 			std::string left(input, 0, pos);
 			std::string right(input, pos+1, std::string::npos);
-			Expression::Ptr expr = std::make_shared<Expression>(op, parse_core(left), parse_core(right));
+			Expression<double>::Ptr expr = std::make_shared<Expression<double>>(op, parse_core(left), parse_core(right));
 			return expr;
 		}
 	}
 
-	Expression::Ptr expr = std::make_shared<Expression>(input);
+	Expression<double>::Ptr expr = std::make_shared<Expression<double>>(input);
 	return expr;
 }
 

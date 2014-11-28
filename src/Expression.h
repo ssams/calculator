@@ -10,15 +10,16 @@
 
 namespace calculator {
 
+template <typename T>
 class Expression {
 public:
-	typedef std::shared_ptr<Expression> Ptr;
-	typedef std::shared_ptr<const Expression> PtrConst;
+	typedef std::shared_ptr<Expression<T>> Ptr;
+	typedef std::shared_ptr<const Expression<T>> PtrConst;
 
 	Expression(std::string op);
 	Expression(std::string op, const PtrConst left, const PtrConst right);
 
-	double evaluate(std::map<std::string, Ptr> params = std::map<std::string, Ptr>()) const;
+	T evaluate(std::map<std::string, Ptr> params = std::map<std::string, Ptr>()) const;
 protected:
 	const PtrConst getLeftNode() const;
 	const PtrConst getRightNode() const;
@@ -30,34 +31,34 @@ private:
 	const PtrConst mRightNode;
 };
 
-Expression::Expression(std::string op) : Expression(op, nullptr, nullptr) {
+template <typename T> Expression<T>::Expression(std::string op) : Expression(op, nullptr, nullptr) {
 
 }
 
-Expression::Expression(std::string op, const PtrConst  left, const PtrConst right) :
+template <typename T> Expression<T>::Expression(std::string op, const PtrConst  left, const PtrConst right) :
 	mOperator(op), mLeftNode(left), mRightNode(right) {
 }
 
-const Expression::PtrConst Expression::getLeftNode() const {
+template <typename T> const typename Expression<T>::PtrConst Expression<T>::getLeftNode() const {
 	return mLeftNode;
 }
 
-const Expression::PtrConst Expression::getRightNode() const {
+template <typename T> const typename Expression<T>::PtrConst Expression<T>::getRightNode() const {
 	return mRightNode;
 }
 
-bool Expression::isLeaf() const {
+template <typename T> bool Expression<T>::isLeaf() const {
 	return (mLeftNode == nullptr) && (mRightNode == nullptr);
 }
 
-double Expression::evaluate(std::map<std::string, Ptr> params) const {
+template <typename T> T Expression<T>::evaluate(std::map<std::string, Ptr> params) const {
 	if(isLeaf()) {
-		std::map<std::string, Expression::Ptr>::iterator param = params.find(mOperator);
+		typename std::map<std::string, Expression::Ptr>::iterator param = params.find(mOperator);
 		if(param != params.end()) {
 			//std::cout << "param: " << param->first << std::endl;
 			return param->second->evaluate();
 		} else {
-			double value;
+			T value;
 			std::istringstream in(mOperator);
 			in >> value;
 			//std::cout << "op: " << mOperator << ", value: " << value << std::endl;

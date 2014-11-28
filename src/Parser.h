@@ -21,11 +21,11 @@ public:
 	Parser();
 	~Parser();
 
-	Expression::Ptr parse(std::string input);
+	Expression<double>::Ptr parse(std::string input);
 
 private:
 
-	Expression::Ptr parse_core(std::string input);
+	Expression<double>::Ptr parse_core(std::string input);
 	std::string preProcessInputString(std::string input);
 
 

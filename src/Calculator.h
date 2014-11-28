@@ -31,7 +31,7 @@ private:
 	const std::regex functionDefRegex;
 	const std::regex functionCallRegex;
 
-	std::map<std::string, Function> functions;
+	std::map<std::string, Function<double>> functions;
 };
 
 
