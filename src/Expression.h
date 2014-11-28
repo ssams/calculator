@@ -20,6 +20,7 @@ public:
 	Expression(std::string op, const PtrConst left, const PtrConst right);
 
 	T evaluate(std::map<std::string, Ptr> params = std::map<std::string, Ptr>()) const;
+
 protected:
 	const PtrConst getLeftNode() const;
 	const PtrConst getRightNode() const;
@@ -30,6 +31,9 @@ private:
 	const PtrConst mLeftNode;
 	const PtrConst mRightNode;
 };
+
+// ------------------------------
+// implementation
 
 template <typename T> Expression<T>::Expression(std::string op) : Expression(op, nullptr, nullptr) {
 
@@ -53,7 +57,7 @@ template <typename T> bool Expression<T>::isLeaf() const {
 
 template <typename T> T Expression<T>::evaluate(std::map<std::string, Ptr> params) const {
 	if(isLeaf()) {
-		typename std::map<std::string, Expression::Ptr>::iterator param = params.find(mOperator);
+		typename std::map<std::string, Expression<T>::Ptr>::iterator param = params.find(mOperator);
 		if(param != params.end()) {
 			//std::cout << "param: " << param->first << std::endl;
 			return param->second->evaluate();

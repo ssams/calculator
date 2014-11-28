@@ -25,6 +25,8 @@ private:
 	std::set<std::string> params;
 };
 
+// ------------------------------
+// implementation
 
 template <typename T> Function<T>::Function(typename ExpressionType::PtrConst expression, std::set<std::string> params) :
 	expression(expression), params(params) {
