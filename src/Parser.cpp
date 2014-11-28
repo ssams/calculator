@@ -10,7 +10,6 @@
 #include <iostream>
 #include <algorithm>
 #include <memory>
-#include <regex>
 #include <set>
 
 namespace calculator{

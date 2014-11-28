@@ -32,10 +32,10 @@ void Calculator::start(){
 		std::cout << ":";
 		std::getline(std::cin, input);
 
-		std::smatch matches;
-		if(std::regex_match(input, matches, functionDefRegex)) {
+		boost::smatch matches;
+		if(boost::regex_match(input, matches, functionDefRegex)) {
 			handleFunctionDefinition(matches);
-		} else if(regex_match(input, matches, functionCallRegex)) {
+		} else if(boost::regex_match(input, matches, functionCallRegex)) {
 			handleFunctionCall(matches);
 		} else {
 			Expression<double>::Ptr e;
@@ -47,7 +47,7 @@ void Calculator::start(){
 }
 
 
-void Calculator::handleFunctionDefinition(const std::smatch &matches) {
+void Calculator::handleFunctionDefinition(const boost::smatch &matches) {
 	std::string functionName = matches[1];
 	std::set<std::string> params(matches.begin() + 2, matches.end() - 1);
 	Expression<double>::Ptr expr = parser->parse(*(matches.end() - 1));
@@ -57,7 +57,7 @@ void Calculator::handleFunctionDefinition(const std::smatch &matches) {
 	std::cout << "stored function " << functionName << std::endl;
 }
 
-void Calculator::handleFunctionCall(const std::smatch &matches) {
+void Calculator::handleFunctionCall(const boost::smatch &matches) {
 	std::cout << "function call" << std::endl;
 	std::string functionName = matches[1];
 	try {

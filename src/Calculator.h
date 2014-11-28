@@ -10,7 +10,7 @@
 
 #include "Parser.h"
 
-#include <regex>
+#include <boost/regex.hpp>
 
 namespace calculator {
 
@@ -22,14 +22,14 @@ public:
 
 	void start();
 
-	void handleFunctionDefinition(const std::smatch &matches);
-	void handleFunctionCall(const std::smatch &matches);
+	void handleFunctionDefinition(const boost::smatch &matches);
+	void handleFunctionCall(const boost::smatch &matches);
 
 private:
 	Parser* parser;
 
-	const std::regex functionDefRegex;
-	const std::regex functionCallRegex;
+	const boost::regex functionDefRegex;
+	const boost::regex functionCallRegex;
 
 	std::map<std::string, Function<double>> functions;
 };
