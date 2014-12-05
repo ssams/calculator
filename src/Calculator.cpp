@@ -10,13 +10,14 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <algorithm>
 
 namespace calculator {
 
 Calculator::Calculator() :
 		parser(),
-		functionDefRegex("([[:alpha:]]+)\\(([[:alpha:]]+)(?:,([[:alpha:]]+))*\\)[[:space:]]*=(.*)"),
-		functionCallRegex("([[:alpha:]]+)\\(([^,]+)(?:,([^,]+))*\\)") {
+		functionDefRegex("([[:alpha:]]+)\\(((?:[[:alpha:]]+)(?:,(?:[[:alpha:]]+))*)\\)[[:space:]]*=(.*)"),
+		functionCallRegex("([[:alpha:]]+)\\(((?:[^,]+)(?:,(?:[^,]+))*)\\)") {
 
 }
 
@@ -49,27 +50,45 @@ void Calculator::start(){
 
 void Calculator::handleFunctionDefinition(const boost::smatch &matches) {
 	std::string functionName = matches[1];
-	std::set<std::string> params(matches.begin() + 2, matches.end() - 1);
-	Expression<double>::Ptr expr = parser->parse(*(matches.end() - 1));
+	auto tokens = splitString(matches[2], ',');
+	std::set<std::string> params(tokens.begin(), tokens.end());
+	Expression<double>::Ptr expr = parser->parse(matches[3]);
 	Function<double> fun(expr, params);
 
+	functions.erase(functionName); // ensure old functions are removed before the new one is created
 	functions.emplace(functionName, fun);
 	std::cout << "stored function " << functionName << std::endl;
 }
 
 void Calculator::handleFunctionCall(const boost::smatch &matches) {
-	std::cout << "function call" << std::endl;
 	std::string functionName = matches[1];
+	std::cout << "calling stored function '" << functionName << "'" << std::endl;
 	try {
 		Function<double> fun = functions.at(functionName);
-		std::vector<Expression<double>::Ptr> values;
-		for(auto i = matches.begin() + 2; i != matches.end(); i++) {
-			values.push_back(parser->parse(*i));
-		}
+		std::vector<std::string> tokens = splitString(matches[2], ',');
+		std::vector<Expression<double>::Ptr> values(tokens.size());
+		std::transform(tokens.begin(), tokens.end(), values.begin(), [this](const std::string &s) {
+			return parser->parse(s);
+		});
 		std::cout << fun.evaluate(values) << std::endl;
 	} catch(std::out_of_range &e) {
 		std::cout << "unknown function" << std::endl;
 	}
+}
+
+std::vector<std::string> Calculator::splitString(const std::string &s, char delimiter) {
+	std::string::size_type start = 0;
+	std::string::size_type end = s.find(delimiter);
+	std::vector<std::string> v;
+
+	while(end != std::string::npos) {
+		v.push_back(s.substr(start, end - start));
+		start = end + 1;
+		end = s.find(delimiter, start);
+	}
+
+	v.push_back(s.substr(start, s.length() - start));
+	return v;
 }
 
 } /* namespace calculator */

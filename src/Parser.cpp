@@ -23,7 +23,7 @@ Parser::~Parser(){
 
 Expression<double>::Ptr Parser::parse(std::string input){
 	input = preProcessInputString(input);
-	std::cout << input << std::endl;
+	//std::cout << input << std::endl;
 	return parse_core(input);
 }
 

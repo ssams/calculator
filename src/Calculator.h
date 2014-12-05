@@ -10,6 +10,8 @@
 
 #include "Parser.h"
 
+#include <string>
+#include <vector>
 #include <boost/regex.hpp>
 
 namespace calculator {
@@ -26,6 +28,8 @@ public:
 	void handleFunctionCall(const boost::smatch &matches);
 
 private:
+	std::vector<std::string> splitString(const std::string &s, char delimiter);
+
 	Parser* parser;
 
 	const boost::regex functionDefRegex;
