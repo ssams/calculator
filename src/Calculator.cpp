@@ -33,7 +33,11 @@ void Calculator::start(){
 		std::getline(std::cin, input);
 
 		boost::smatch matches;
-		if(boost::regex_match(input, matches, functionDefRegex)) {
+		if(input == "help"){
+			std::cout << "calculator help" << std::endl;
+			showFunctions();
+		}
+		else if(boost::regex_match(input, matches, functionDefRegex)) {
 			handleFunctionDefinition(matches);
 		} else if(boost::regex_match(input, matches, functionCallRegex)) {
 			handleFunctionCall(matches);
@@ -70,6 +74,15 @@ void Calculator::handleFunctionCall(const boost::smatch &matches) {
 	} catch(std::out_of_range &e) {
 		std::cout << "unknown function" << std::endl;
 	}
+}
+
+void Calculator::showFunctions(){
+
+	std::cout << "defined functions:" << std::endl;
+	std::for_each(functions.begin(), functions.end(), [](std::map<std::string, Function<double>>::value_type v){
+		std::cout << v.first;
+		std::cout << v.second << std::endl;
+	});
 }
 
 } /* namespace calculator */

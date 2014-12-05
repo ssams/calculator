@@ -24,6 +24,7 @@ public:
 
 	void handleFunctionDefinition(const boost::smatch &matches);
 	void handleFunctionCall(const boost::smatch &matches);
+	void showFunctions();
 
 private:
 	Parser* parser;

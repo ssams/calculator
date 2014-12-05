@@ -13,7 +13,16 @@ namespace calculator {
 template <typename T>
 class Function {
 public:
+
 	typedef Expression<T> ExpressionType;
+
+
+	friend std::ostream& operator<<(std::ostream &strm, const Function &a) {
+		for(auto p: a.params){
+			strm << p << ",";
+		}
+		return strm;
+	}
 
 	Function(typename ExpressionType::PtrConst expression, std::set<std::string> params);
 	virtual ~Function();
@@ -23,6 +32,8 @@ public:
 private:
 	typename ExpressionType::PtrConst expression;
 	std::set<std::string> params;
+
+
 };
 
 // ------------------------------
@@ -50,6 +61,9 @@ template<typename T> T Function<T>::evaluate(std::vector<typename ExpressionType
 
 	return expression->evaluate(paramMap);
 }
+
+
+
 
 } /* namespace calculator */
 
