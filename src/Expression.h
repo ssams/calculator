@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <future>
 
 namespace calculator {
 
@@ -19,7 +20,7 @@ public:
 	Expression(std::string op);
 	Expression(std::string op, const PtrConst left, const PtrConst right);
 
-	T evaluate(std::map<std::string, Ptr> params = std::map<std::string, Ptr>()) const;
+	T evaluate(std::map<std::string, Ptr> params = std::map<std::string, Ptr>(), unsigned short concurrent = 3) const;
 
 protected:
 	const PtrConst getLeftNode() const;
@@ -55,7 +56,7 @@ template <typename T> bool Expression<T>::isLeaf() const {
 	return (mLeftNode == nullptr) && (mRightNode == nullptr);
 }
 
-template <typename T> T Expression<T>::evaluate(std::map<std::string, Ptr> params) const {
+template <typename T> T Expression<T>::evaluate(std::map<std::string, Ptr> params, unsigned short concurrent) const {
 	if(isLeaf()) {
 		typename std::map<std::string, Expression<T>::Ptr>::iterator param = params.find(mOperator);
 		if(param != params.end()) {
@@ -69,14 +70,32 @@ template <typename T> T Expression<T>::evaluate(std::map<std::string, Ptr> param
 			return value;
 		}
 	} else {
+		auto evaluate = [this, &params, concurrent] (Expression<T>::PtrConst node) {
+			return node->evaluate(params, concurrent > 0 ? concurrent - 1 : 0);
+		};
+		T left, right;
+
+		if(concurrent > 0) {
+			// launch async tasks
+			auto leftHandle = std::async(std::launch::async, evaluate, getLeftNode());
+			auto rightHandle = std::async(std::launch::async, evaluate, getRightNode());
+
+			// retrieve results
+			left = leftHandle.get();
+			right = rightHandle.get();
+		} else {
+			left = evaluate(getLeftNode());
+			right = evaluate(getRightNode());
+		}
+
 		if(mOperator == "*") {
-			return getLeftNode()->evaluate(params) * getRightNode()->evaluate(params);
+			return left * right;
 		} else if(mOperator == "/") {
-			return getLeftNode()->evaluate(params) / getRightNode()->evaluate(params);
+			return left / right;
 		} else if(mOperator == "+") {
-			return getLeftNode()->evaluate(params) + getRightNode()->evaluate(params);
+			return left + right;
 		} else if(mOperator == "-") {
-			return getLeftNode()->evaluate(params) - getRightNode()->evaluate(params);
+			return left - right;
 		}
 		throw std::runtime_error("could not evaluate operator");
 	}
