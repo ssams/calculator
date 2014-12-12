@@ -8,6 +8,7 @@
 #ifndef CALCULATOR_H_
 #define CALCULATOR_H_
 
+#include "BasicCalculator.h"
 #include "Parser.h"
 
 #include <string>
@@ -16,17 +17,17 @@
 
 namespace calculator {
 
-class Calculator {
+class Calculator : public BasicCalculator {
 
 public:
 	Calculator();
 	virtual ~Calculator();
 
-	void start();
+	void start() override;
 
 	void handleFunctionDefinition(const boost::smatch &matches);
 	void handleFunctionCall(const boost::smatch &matches);
-	void showFunctions();
+	void showFunctions() override;
 
 private:
 	std::vector<std::string> splitString(const std::string &s, char delimiter);

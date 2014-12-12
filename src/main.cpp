@@ -6,6 +6,7 @@
 #include "Expression.h"
 #include "Function.h"
 #include "Parser.h"
+#include "BasicCalculator.h"
 #include "Calculator.h"
 
 using namespace calculator;
@@ -40,9 +41,10 @@ int main(int argc, char *argv[]) {
 	delete parser;
 	return EXIT_SUCCESS;*/
 
-	Calculator calc;
-	calc.start();
+	BasicCalculator * calc = new Calculator();
+	calc->start();
 
+	delete calc;
 	return EXIT_SUCCESS;
 }
 
