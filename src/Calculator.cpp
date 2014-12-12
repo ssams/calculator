@@ -33,19 +33,21 @@ void Calculator::start(){
 		std::cout << ":";
 		std::getline(std::cin, input);
 
-		boost::smatch matches;
-		if(input == "help"){
-			std::cout << "calculator help" << std::endl;
-			showFunctions();
-		}
-		else if(boost::regex_match(input, matches, functionDefRegex)) {
-			handleFunctionDefinition(matches);
-		} else if(boost::regex_match(input, matches, functionCallRegex)) {
-			handleFunctionCall(matches);
-		} else {
-			Expression<double>::Ptr e;
-			e = parser->parse(input);
-			std::cout << e->evaluate() << std::endl;
+		if(input != "q") {
+			boost::smatch matches;
+			if(input == "help"){
+				std::cout << "calculator help" << std::endl;
+				showFunctions();
+			}
+			else if(boost::regex_match(input, matches, functionDefRegex)) {
+				handleFunctionDefinition(matches);
+			} else if(boost::regex_match(input, matches, functionCallRegex)) {
+				handleFunctionCall(matches);
+			} else {
+				Expression<double>::Ptr e;
+				e = parser->parse(input);
+				std::cout << e->evaluate() << std::endl;
+			}
 		}
 
 	}
