@@ -20,7 +20,7 @@ public:
 	Expression(std::string op);
 	Expression(std::string op, const PtrConst left, const PtrConst right);
 
-	T evaluate(std::map<std::string, Ptr> params = std::map<std::string, Ptr>(), unsigned short concurrent = 3) const;
+	T evaluate(const std::map<std::string, Ptr> params = std::map<std::string, Ptr>(), unsigned short concurrent = 3) const;
 
 protected:
 	const PtrConst getLeftNode() const;
@@ -56,9 +56,9 @@ template <typename T> bool Expression<T>::isLeaf() const {
 	return (mLeftNode == nullptr) && (mRightNode == nullptr);
 }
 
-template <typename T> T Expression<T>::evaluate(std::map<std::string, Ptr> params, unsigned short concurrent) const {
+template <typename T> T Expression<T>::evaluate(const std::map<std::string, Ptr> params, unsigned short concurrent) const {
 	if(isLeaf()) {
-		typename std::map<std::string, Expression<T>::Ptr>::iterator param = params.find(mOperator);
+		typename std::map<std::string, Expression<T>::Ptr>::const_iterator param = params.find(mOperator);
 		if(param != params.end()) {
 			//std::cout << "param: " << param->first << std::endl;
 			return param->second->evaluate();
