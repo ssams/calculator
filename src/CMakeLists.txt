@@ -7,5 +7,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -Wall")
 find_package(Boost REQUIRED COMPONENTS regex)
 include_directories(${Boost_INCLUDE_DIRS})
 
+find_package(Threads)
+
 add_executable (calculator main.cpp Parser.cpp Calculator.cpp)
-target_link_libraries (calculator ${Boost_LIBRARIES})
+target_link_libraries (calculator ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
